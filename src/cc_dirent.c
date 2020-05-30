@@ -9,42 +9,55 @@
 
 CCDIR *cc_opendir(const char *name)
 {
-	int fd;
-	struct stat buf;
-	CCDIR *dp;
+    int fd;
+    struct stat buf;
+    CCDIR *dp;
 
-	if ((fd = open(name, O_RDONLY, 0)) == -1 || fstat(fd, &buf) == -1
-		|| !S_ISDIR(buf.st_mode)
-		|| (dp = (CCDIR *) cc_malloc(sizeof(CCDIR))) == NULL)
-		return NULL;
-	dp->fd = fd;
+    fd = open(name, O_RDONLY, 0);
+    if (fd == -1)
+        return NULL;
 
-	return dp;
+    if (fstat(fd, &buf) == -1)
+        return NULL;
+
+    if (!S_ISDIR(buf.st_mode))
+        return NULL;
+
+    dp = cc_malloc(sizeof(CCDIR));
+    if (dp == NULL)
+        return NULL;
+
+    dp->fd = fd;
+
+    return dp;
 }
 
 struct cc_dirent *cc_readdir(CCDIR *dp)
 {
-	struct direct dir_buf;     /* local directory structure */
-	static struct cc_dirent d;  /* return: portable structure */
+    struct direct dir_buf;
+    static struct cc_dirent d;
 
-	while (read(dp->fd, (char *)&dir_buf, sizeof dir_buf) == sizeof dir_buf) {
-		if (dir_buf.d_ino == 0) /* slot not in use */
-			continue;
-		d.ino = dir_buf.d_ino;
-		cc_strncpy(d.name, dir_buf.d_name, NAMEMAX);
-		d.name[NAMEMAX] = '\0';
-		return &d;
-	}
+    while (read(dp->fd, (char *)&dir_buf, sizeof dir_buf) == sizeof dir_buf) {
+        if (dir_buf.d_ino == 0)
+            continue;
 
-	return NULL;
+        d.ino = dir_buf.d_ino;
+        cc_strncpy(d.name, dir_buf.d_name, NAMEMAX);
+        d.name[NAMEMAX] = '\0';
+
+        return &d;
+    }
+
+    return NULL;
 }
 
 int cc_closedir(CCDIR *dp)
 {
-	if (dp) {
-		close(dp->fd);
-		cc_free(dp);
-	}
+    if (dp) {
+        close(dp->fd);
+        cc_free(dp);
+    }
 
-	return 0;
+    return 0;
 }
+

@@ -71,7 +71,7 @@
  * it should be a compile error if passing a pointer as an argument
  */
 #define ARRAY_COUNT(x) ((sizeof (x) / sizeof (0[x])) \
-						/ ((size_t) !(sizeof (x) % sizeof(0[x]))))
+                        / ((size_t) !(sizeof (x) % sizeof(0[x]))))
 
 /* some useful string macros */
 #define STRING_EQUAL(s1, s2)  (strcmp(s1, s2) == 0)
@@ -83,26 +83,26 @@
 #define CC_INFO(format, ...)
 #define CC_WARNING(format, ...)
 #define CC_ERROR(format, ...) \
-	fprintf(stderr, "error: %s:%s():%d: " format, \
-			__FILE__, __func__, __LINE__, ##__VA_ARGS__)
+    fprintf(stderr, "error: %s:%s():%d: " format, \
+            __FILE__, __func__, __LINE__, ##__VA_ARGS__)
 #elif CC_PRINT_LEVEL == 2
 #define CC_INFO(format, ...)
 #define CC_WARNING(format, ...) \
-	fprintf(stdout, "warning: %s:%s():%d: " format, \
-			__FILE__, __func__, __LINE__, ##__VA_ARGS__)
+    fprintf(stdout, "warning: %s:%s():%d: " format, \
+            __FILE__, __func__, __LINE__, ##__VA_ARGS__)
 #define CC_ERROR(format, ...) \
-	fprintf(stderr, "error: %s:%s():%d: " format, \
-			__FILE__, __func__, __LINE__, ##__VA_ARGS__)
+    fprintf(stderr, "error: %s:%s():%d: " format, \
+            __FILE__, __func__, __LINE__, ##__VA_ARGS__)
 #elif CC_PRINT_LEVEL == 3
 #define CC_INFO(format, ...) \
-	fprintf(stdout, "info: %s:%s():%d: " format, \
-			__FILE__, __func__, __LINE__, ##__VA_ARGS__)
+    fprintf(stdout, "info: %s:%s():%d: " format, \
+            __FILE__, __func__, __LINE__, ##__VA_ARGS__)
 #define CC_WARNING(format, ...) \
-	fprintf(stdout, "warning: %s:%s():%d: " format, \
-			__FILE__, __func__, __LINE__, ##__VA_ARGS__)
+    fprintf(stdout, "warning: %s:%s():%d: " format, \
+            __FILE__, __func__, __LINE__, ##__VA_ARGS__)
 #define CC_ERROR(format, ...) \
-	fprintf(stderr, "error: %s:%s():%d: " format, \
-			__FILE__, __func__, __LINE__, ##__VA_ARGS__)
+    fprintf(stderr, "error: %s:%s():%d: " format, \
+            __FILE__, __func__, __LINE__, ##__VA_ARGS__)
 #else
 #error Sorry, you defined an unsupported CC_PRINT_LEVEL
 #endif /* CC_PRINT_LEVEL == 2 */
@@ -114,10 +114,11 @@
 
 /* lambda */
 #define lambda(return_type, ...) \
-	__extension__ \
-	({ \
-		return_type __fn__ __VA_ARGS__ \
-		__fn__; \
-	})
+    __extension__ \
+    ({ \
+        return_type __fn__ __VA_ARGS__ \
+        __fn__; \
+    })
 
 #endif /* _COMMON_H */
+

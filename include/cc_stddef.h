@@ -2,7 +2,7 @@
  * ISO C standard: Common definitions <cc_stddef.h>
  */
 #if !defined(_CC_STDDEF_H) || defined(__need_size_t) \
-	|| defined(__need_boolean) || defined(__need_NULL)
+    || defined(__need_boolean) || defined(__need_NULL)
 
 #if defined(_CC_STDDEF_H) || defined(__need_NULL)
 #undef NULL /* in case <cc_stdio.h> has defined it */
@@ -34,3 +34,4 @@ typedef __SIZE_TYPE size_t;
 #endif /* defined(_CC_STDDEF_H) || defined(__need_boolean) */
 
 #endif /* !_CC_STDDEF_H || __need_XXX was defined before */
+
