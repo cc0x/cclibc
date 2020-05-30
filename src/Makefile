@@ -1,4 +1,6 @@
-objects = cc_dirent.o cc_stdio.o cc_stdlib.o cc_string.o cc_type.o
+std_objs = cc_dirent.o cc_stdio.o cc_stdlib.o cc_string.o cc_type.o
+my_objs = cc_vector.o
+objects = $(std_objs) $(my_objs)
 
 LIBCCLIBC = libcc.so.1.0.0
 LIBSONAME = libcc.so.1

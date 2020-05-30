@@ -5,6 +5,11 @@ distdir = $(tarname)-$(version)
 
 all clean install uninstall:
 	cd src && $(MAKE) $@
+	cd samples && $(MAKE) $@
+
+sample:
+	cd src && $(MAKE) all
+	cd samples && $(MAKE)
 
 dist: $(distdir).tar.gz
 

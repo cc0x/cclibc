@@ -42,25 +42,5 @@ void cc_qsort(void *base, size_t nmemb, size_t size,
 void *cc_bsearch(const void *key, const void *base, size_t nmemb, size_t size,
                  int (*compare)(const void *key, const void *elt));
 
-/*
- * An simple implementaion of vector
- */
-#define NEW_VECTOR_SIZE 16
-
-typedef struct {
-    void **items;
-    int capacity;
-    int size;
-} vector_t;
-
-extern vector_t *vector_new(void);
-extern int vector_size(vector_t *v);
-extern void *vector_at(vector_t *v, int index);
-extern int vector_push(vector_t *v, void *item);
-extern int vector_insert(vector_t *v, int index, void *item);
-extern void *vector_pop(vector_t *v);
-extern int vector_delete(vector_t *v, int index);
-extern int vector_find(vector_t *v, void *item);
-
 #endif /* !_CC_STDLIB_H */
 

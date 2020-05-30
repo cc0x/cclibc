@@ -7,9 +7,6 @@
 static Header base;    /* empty list to get started */
 static Header *freep;  /* start of free list */
 
-/*
- * @rief Ask system for more memory
- */
 static Header *morecore(unsigned nu)
 {
     void *cp;
@@ -28,9 +25,6 @@ static Header *morecore(unsigned nu)
     return freep;
 }
 
-/*
- * @brief General-purpose storage allocator
- */
 void *cc_malloc(size_t size)
 {
     Header *p, *prevp;
@@ -63,9 +57,6 @@ void *cc_malloc(size_t size)
     }
 }
 
-/*
- * @brief Allocates memory for an array of nmem elements of size bytes each
- */
 void *cc_calloc(size_t nmem, size_t size)
 {
     void *data;
@@ -77,10 +68,6 @@ void *cc_calloc(size_t nmem, size_t size)
     return data;
 }
 
-/*
- * cc_bfree: frees an arbitrary block p of n bytes into the freelist
- * maintained by cc_malloc and cc_free
- */
 void *cc_realloc(void *p, size_t size)
 {
     size_t pre_size;
@@ -96,9 +83,6 @@ void *cc_realloc(void *p, size_t size)
     return tmp;
 }
 
-/*
- * @brief Put block ap in free list
- */
 void cc_free(void *ap)
 {
     Header *bp, *p;
@@ -170,20 +154,6 @@ void cc_qsort(void *base, size_t nmemb, size_t size,
     cc_qsort(pivot + size, nmemb - ((pivot - (char *) base) / size) -1 , size, compare);
 }
 
-/*
- * @brief An implement of binary search algorithm
- *
- * @param[in] key Search key
- * @param[in] base Pointer to initial member of the searched array,
- * that should be in ascending sorted order acc_ording to the
- * comparison function
- * @param[in] nmemb Number objects of the searched array
- * @param[in] size The size of each member of the searched array
- * @param[in] compare A compare function
- *
- * @return a pointer to a matching member of the array, or NULL if no match
- * is found.
- */
 void *cc_bsearch(const void *key, const void *base, size_t nmemb, size_t size,
                  int (*compare)(const void *key, const void *elt))
 {
@@ -206,104 +176,3 @@ void *cc_bsearch(const void *key, const void *base, size_t nmemb, size_t size,
 
     return NULL;
 }
-
-/*
- * vector_t implement
- */
-static int vector_resize(vector_t *v, int cap)
-{
-    void **tmp = cc_realloc(v->items, (sizeof *v->items) * cap);
-    if (!tmp)
-        return -1;
-
-    v->items = tmp;
-    v->capacity = cap;
-
-    return 0;
-}
-
-vector_t *vector_new(void)
-{
-    vector_t *v;
-
-    v = cc_malloc(sizeof(vector_t));
-    if (!v)
-        return NULL;
-
-    v->items = cc_malloc((sizeof *v->items) * NEW_VECTOR_SIZE);
-    if (!v->items) {
-        cc_free(v);
-        return NULL;
-    }
-    v->capacity = NEW_VECTOR_SIZE;
-    v->size = 0;
-
-    return v;
-}
-
-int vector_size(vector_t *v)
-{
-    return v->size;
-}
-
-void *vector_at(vector_t *v, int index)
-{
-    if (index >= v->size || index < 0)
-        return NULL;
-
-    return *(v->items + index);
-}
-
-int vector_push(vector_t *v, void *item)
-{
-    if (v->size == v->capacity)
-        if (vector_resize(v, v->capacity * 2))
-            return -1;
-
-    *(v->items + v->size++) = item;
-
-    return 0;
-}
-
-int vector_insert(vector_t *v, int index, void *item)
-{
-    if (index >= v->size || index < 0)
-        return -1;
-
-    if (v->size == v->capacity)
-        if (vector_resize(v, v->capacity * 2))
-            return -1;
-
-    for (int i = index; i < v->size; i++)
-        *(v->items + i + 1) = *(v->items + i);
-    *(v->items + index) = item;
-
-    return 0;
-}
-
-void *vector_pop(vector_t *v)
-{
-    return *(v->items + --v->size);
-}
-
-int vector_delete(vector_t *v, int index)
-{
-    if (index >= v->size || index < 0)
-        return -1;
-
-    for (int i = index; i < v->size; i++)
-        *(v->items + i) = *(v->items + i + 1);
-    v->size--;
-
-    return 0;
-}
-
-int vector_find(vector_t *v, void *item)
-{
-    for (int i = 0; i < v->size; i++)
-        if (*(v->items + i) == item)
-            return i;
-
-    return -1;
-}
-
